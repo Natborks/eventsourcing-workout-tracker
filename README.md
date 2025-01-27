@@ -7,7 +7,7 @@ including an event store, a projection store, and an event bus.
 This starter pack implements a simple example for a Cooking Club Membership. But you're meant to replace this example
 with your own application.
 
-## Getting Started
+## Getting Started (5 minutes)
 
 To run this application you need to install Docker or Podman as a containerization tool.
 Once you have Docker or Podman installed, please open your Terminal (linux or mac) or
@@ -15,15 +15,15 @@ Powershell (windows), clone this repository, and navigate to the scripts folder 
 your operating system and containerization tool.
 
 ```
-git clone git@github.com:ambarltd/event-sourcing-typescript.git
+git clone git@github.com:ambarltd/event-sourcing-java.git
 
-cd event-sourcing-typescript/local-development/docker-scripts/linux # linux + docker
-cd event-sourcing-typescript/local-development/docker-scripts/mac # mac + docker
-cd event-sourcing-typescript\local-development\docker-scripts\windows  # windows + docker
+cd event-sourcing-java/local-development/docker-scripts/linux # linux + docker
+cd event-sourcing-java/local-development/docker-scripts/mac # mac + docker
+cd event-sourcing-java\local-development\docker-scripts\windows  # windows + docker
 
-cd event-sourcing-typescript/local-development/podman-scripts/linux # linux + podman
-cd event-sourcing-typescript/local-development/podman-scripts/mac # mac + podman
-cd event-sourcing-typescript\local-development\podman-scripts\windows  # windows + podman
+cd event-sourcing-java/local-development/podman-scripts/linux # linux + podman
+cd event-sourcing-java/local-development/podman-scripts/mac # mac + podman
+cd event-sourcing-java\local-development\podman-scripts\windows  # windows + podman
 
 # If you're using docker, make sure docker is up and running.
 # If you're using podman, make sure podman is up and running. Also make sure there's an active podman machine.
