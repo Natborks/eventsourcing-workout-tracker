@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import eventsourcing.common.event.Event;
 import eventsourcing.domain.cookingclub.membership.event.ApplicationEvaluated;
 import eventsourcing.domain.cookingclub.membership.event.ApplicationSubmitted;
+import eventsourcing.domain.supertodos.todolist.event.TodoListStarted;
+import eventsourcing.domain.workouttracker.sessions.event.SessionStarted;
+import eventsourcing.domain.workouttracker.sessions.event.WorkoutAdded;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -39,8 +43,17 @@ public class Serializer {
         if (event instanceof ApplicationSubmitted) {
             return "CookingClub_Membership_ApplicationSubmitted";
         }
+        if (event instanceof TodoListStarted) {
+            return "SuperTodos_TodoList_TodoListStarted";
+        }
         if (event instanceof ApplicationEvaluated) {
             return "CookingClub_Membership_ApplicationEvaluated";
+        }
+        if (event instanceof SessionStarted) {
+            return "WorkoutTracker_Sessions_SessionStarted";
+        }
+        if (event instanceof WorkoutAdded){
+            return "WorkoutTracker_Sessions_WorkoutAdded";
         }
         throw new RuntimeException("Unknown event type: " + event.getClass().getName());
     }
@@ -57,6 +70,13 @@ public class Serializer {
                 jsonPayload.put("numberOfCookingBooksRead", applicationSubmitted.getNumberOfCookingBooksRead());
             } else if (event instanceof ApplicationEvaluated applicationEvaluated) {
                 jsonPayload.put("evaluationOutcome", applicationEvaluated.getEvaluationOutcome().name());
+            }else if (event instanceof TodoListStarted todoListStarted) {
+                jsonPayload.put("name", todoListStarted.getName());
+            } else if (event instanceof SessionStarted sessionStarted) {
+                jsonPayload.put("startTime", sessionStarted.getStartTime().getDate()
+                        + sessionStarted.getStartTime().getTime());
+            } else if (event instanceof WorkoutAdded workoutAdded) {
+                jsonPayload.put("workout", workoutAdded.getWorkout().workoutType().toString());
             }
 
             return objectMapper.writeValueAsString(jsonPayload);

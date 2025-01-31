@@ -7,12 +7,18 @@ import eventsourcing.common.event.Event;
 import eventsourcing.domain.cookingclub.membership.aggregate.MembershipStatus;
 import eventsourcing.domain.cookingclub.membership.event.ApplicationEvaluated;
 import eventsourcing.domain.cookingclub.membership.event.ApplicationSubmitted;
+import eventsourcing.domain.supertodos.todolist.event.TodoListStarted;
+import eventsourcing.domain.workouttracker.sessions.aggregate.Workout;
+import eventsourcing.domain.workouttracker.sessions.aggregate.WorkoutType;
+import eventsourcing.domain.workouttracker.sessions.event.SessionStarted;
+import eventsourcing.domain.workouttracker.sessions.event.WorkoutAdded;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +49,37 @@ public class Deserializer {
                     .causationId(serializedEvent.getCausationId())
                     .recordedOn(toInstant(serializedEvent.getRecordedOn()))
                     .evaluationOutcome(MembershipStatus.fromString(payloadString(serializedEvent.getJsonPayload(), "evaluationOutcome")))
+                    .build();
+        } else if ("SuperTodos_TodoList_TodoListStarted".equals(serializedEvent.getEventName())) {
+            return TodoListStarted.builder()
+                    .eventId(serializedEvent.getEventId())
+                    .aggregateId(serializedEvent.getAggregateId())
+                    .aggregateVersion(serializedEvent.getAggregateVersion())
+                    .correlationId(serializedEvent.getCorrelationId())
+                    .causationId(serializedEvent.getCausationId())
+                    .recordedOn(toInstant(serializedEvent.getRecordedOn()))
+                    .name(payloadString(serializedEvent.getJsonPayload(), "name"))
+                    .build();
+        } else if ("WorkoutTracker_Sessions_SessionStarted".equals(serializedEvent.getEventName())) {
+            return SessionStarted.builder()
+                    .eventId(serializedEvent.getEventId())
+                    .aggregateId(serializedEvent.getAggregateId())
+                    .aggregateVersion(serializedEvent.getAggregateVersion())
+                    .correlationId(serializedEvent.getCorrelationId())
+                    .causationId(serializedEvent.getCausationId())
+                    .recordedOn(toInstant(serializedEvent.getRecordedOn()))
+                    //parse date properly
+                    .startTime(new Date())
+                    .build();
+        } else if ("WorkoutTracker_Sessions_WorkoutAdded".equals(serializedEvent.getEventName())){
+            return WorkoutAdded.builder()
+                    .eventId(serializedEvent.getEventId())
+                    .aggregateId(serializedEvent.getAggregateId())
+                    .aggregateVersion(serializedEvent.getAggregateVersion())
+                    .correlationId(serializedEvent.getCorrelationId())
+                    .causationId(serializedEvent.getCausationId())
+                    .recordedOn(toInstant(serializedEvent.getRecordedOn()))
+                    .workout(new Workout(WorkoutType.BENCH_PRESS, 2,20))
                     .build();
         }
         throw new RuntimeException("Unknown event type: " + serializedEvent.getEventName());
